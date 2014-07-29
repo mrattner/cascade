@@ -1,0 +1,65 @@
+<h1>Define a new task</h1>
+<form name="newTask">
+	<label>
+		What do you want to do?
+		<input name="goal" type="text"/>
+	</label>
+
+	<h2>How often?</h2>
+	<label>
+		<input name="quantity" type="number" value="1" />
+		time(s)
+	</label>
+
+	<label>
+		every
+		<input name="frequency" type="number" value="1" />
+	</label>
+
+	<label for="deadline-type" hidden>Choose hours, days, or weeks</label>
+	<select id="deadline-type">
+		<option>hour(s)</option>
+		<option selected>day(s)</option>
+		<option>week(s)</option>
+	</select>
+
+	<br />
+
+	<label>
+		<input type="checkbox" name="hasDuration" value="true" />
+		(Duration?)
+	</label>
+	<br />
+
+	<label for="duration-value">for a duration of</label>
+	<input name="duration" id="duration-value" type="number" disabled/>
+	<label for="duration-type" hidden>Choose minutes or hours</label>
+	<select id="duration-type" disabled>
+		<option selected>minute(s)</option>
+		<option>hour(s)</option>
+	</select>
+
+	<br />
+
+	<label>
+		<input name="repeat" type="radio" value="forever" checked />
+		Repeat indefinitely
+	</label>
+	<label>
+		<input name="repeat" type="radio" value="times" />
+		End after
+	</label>
+	<label>
+		<input name="repeatTimes" type="number" disabled />
+		times
+	</label>
+	<label>
+		<input name="repeat" type="radio" value="date" />
+		End after date
+	</label>
+	<label for="end-repeat-date" hidden>Choose a date</label>
+	<input name="endRepeat" id="end-repeat-date" type="date" disabled />
+
+	<br />
+	<button>Create Task</button>
+</form>
