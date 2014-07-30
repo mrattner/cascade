@@ -1,8 +1,11 @@
 /// <reference path="../lib/moment.d.ts" />
 
-module App
-{
-	class Task {
+module App {
+	export class TaskController {
+
+	}
+
+	export class Task {
 		/**
 		 * A description of the task. Example: "Go to bed before midnight"
 		 */
