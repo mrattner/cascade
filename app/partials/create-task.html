@@ -1,65 +1,47 @@
-<h1>Define a new task</h1>
-<form name="newTask">
-	<label>
-		What do you want to do?
-		<input name="goal" type="text"/>
-	</label>
+<div ng-controller="TaskController">
+	<h1>Define a new task</h1>
+	<form name="newTask" ng-submit="viewModel.submit(newTask)">
+		<label>
+			What do you want to do?
+			<input name="goal" ng-model="goal" type="text" required />
+		</label>
 
-	<h2>How often?</h2>
-	<label>
-		<input name="quantity" type="number" value="1" />
-		time(s)
-	</label>
+		<h2>How often?</h2>
+		<label>
+			<input name="quantity" ng-model="quantity" type="number" min="1" required />
+			time(s)
+		</label>
 
-	<label>
-		every
-		<input name="frequency" type="number" value="1" />
-	</label>
+		<label>
+			every
+			<input name="frequency" ng-model="frequency" type="number" min="1" required />
+		</label>
 
-	<label for="deadline-type" hidden>Choose hours, days, or weeks</label>
-	<select id="deadline-type">
-		<option>hour(s)</option>
-		<option selected>day(s)</option>
-		<option>week(s)</option>
-	</select>
+		<label for="deadline-type" hidden>Choose frequency</label>
+		<select id="deadline-type" ng-model="deadlineType" ng-options="val.text for val in viewModel.DEADLINE_OPTIONS"
+				ng-init="deadlineType = viewModel.DEADLINE_OPTIONS[1]" required>
+			<option value="">-frequency-</option>
+		</select>
 
-	<br />
+		<br />
 
-	<label>
-		<input type="checkbox" name="hasDuration" value="true" />
-		(Duration?)
-	</label>
-	<br />
+		<label>
+			<input type="checkbox" name="hasDuration" ng-model="hasDuration" value="true" />
+			(Duration?)
+		</label>
+		<br />
 
-	<label for="duration-value">for a duration of</label>
-	<input name="duration" id="duration-value" type="number" disabled/>
-	<label for="duration-type" hidden>Choose minutes or hours</label>
-	<select id="duration-type" disabled>
-		<option selected>minute(s)</option>
-		<option>hour(s)</option>
-	</select>
+		<label for="duration-value" ng-show="hasDuration">for a duration of</label>
+		<input name="duration" ng-model="durationValue" id="duration-value" type="number" min="0" ng-show="hasDuration"
+				ng-required="hasDuration"/>
+	
+		<label for="duration-type" hidden>Choose duration length</label>
+		<select id="duration-type" ng-model="durationType" ng-options="val.text for val in viewModel.DURATION_OPTIONS"
+				ng-show="hasDuration" ng-required="hasDuration" ng-init="durationType = viewModel.DURATION_OPTIONS[0]">
+			<option value="">-duration-</option>
+		</select>
 
-	<br />
-
-	<label>
-		<input name="repeat" type="radio" value="forever" checked />
-		Repeat indefinitely
-	</label>
-	<label>
-		<input name="repeat" type="radio" value="times" />
-		End after
-	</label>
-	<label>
-		<input name="repeatTimes" type="number" disabled />
-		times
-	</label>
-	<label>
-		<input name="repeat" type="radio" value="date" />
-		End after date
-	</label>
-	<label for="end-repeat-date" hidden>Choose a date</label>
-	<input name="endRepeat" id="end-repeat-date" type="date" disabled />
-
-	<br />
-	<button>Create Task</button>
-</form>
+		<br />
+		<button ng-disabled="newTask.$invalid">Create Task</button>
+	</form>
+</div>

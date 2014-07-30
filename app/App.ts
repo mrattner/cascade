@@ -10,7 +10,7 @@ module App {
 	cascadeApp.config(["$routeProvider", ($routeProvider:ng.route.IRouteProvider) => {
 		$routeProvider.when("/create", {
 			templateUrl: "partials/create-task.html",
-			controller: "TaskController"
+			controller: TaskController
 		}).
 				otherwise({redirectTo: "/create"});
 	}]);
