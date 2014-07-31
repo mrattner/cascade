@@ -11,7 +11,7 @@ module App {
 		$routeProvider.when("/create", {
 			templateUrl: "partials/create-task.html",
 			controller: TaskController
-		}).
-				otherwise({redirectTo: "/create"});
+		})
+		.otherwise({redirectTo: "/create"});
 	}]);
 }

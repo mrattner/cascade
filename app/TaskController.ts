@@ -4,10 +4,13 @@
 module App {
 	export class TaskController {
 		/**
-		 * The list of tasks.
+		 * The "database" of tasks.
 		 */
-		public tasks:Task[];
+		private tasks:Task[] = [];
 
+		/**
+		 * The options for the Select fields in the form.
+		 */
 		public DEADLINE_OPTIONS:TimeOption[] = [	{"name": "hours", "text": "hour(s)"},
 														{"name": "days", "text": "day(s)"},
 														{"name": "weeks", "text": "week(s)"}];
@@ -21,7 +24,6 @@ module App {
 		public static $inject = ["$scope"];
 
 		constructor (private $scope:ITaskScope) {
-			this.tasks = $scope.tasks = [];
 			$scope.viewModel = this;
 		}
 
@@ -31,9 +33,40 @@ module App {
 		 */
 		public submit (form:ng.IFormController):void {
 			if (form.$valid && this.integersAreValid()) {
-				// TODO - create a new Task object from the form values; reset the form
-				console.log("form submitted!");
+				var goal:string = this.$scope.goal;
+				var quantity:number = this.$scope.quantity;
+				var frequency:number = this.$scope.frequency;
+				var deadlineType:string = this.$scope.deadlineType ? this.$scope.deadlineType.name : null;
+				var deadline:Duration = TaskController.createDuration(frequency, deadlineType);
+				var durationValue:number = this.$scope.durationValue;
+				var durationType:string = this.$scope.durationType ? this.$scope.durationType.name : null;
+				var duration:Duration = this.$scope.hasDuration ? TaskController.createDuration(
+						durationValue, durationType) : null;
+
+				var newTask:Task = {
+					goal: goal,
+					quantity: quantity,
+					duration: duration,
+					deadline: deadline,
+					level: 1
+				};
+
+				// Add the new task to the task "database."
+				this.tasks.push(newTask);
+
+				this.reset(form);
 			}
+		}
+
+		public reset (form:ng.IFormController) {
+			this.$scope.goal = null;
+			this.$scope.quantity = null;
+			this.$scope.frequency = null;
+			this.$scope.deadlineType = this.DEADLINE_OPTIONS[1];
+			this.$scope.hasDuration = null;
+			this.$scope.durationValue = null;
+			this.$scope.durationType = this.DURATION_OPTIONS[0];
+			form.$setPristine();
 		}
 
 		/**
@@ -44,6 +77,20 @@ module App {
 			var requiredValuesAreInts:boolean = this.$scope.quantity % 1 === 0 && this.$scope.frequency % 1 === 0;
 			var durationIsInt:boolean = this.$scope.hasDuration ? this.$scope.durationValue % 1 === 0 : true;
 			return requiredValuesAreInts && durationIsInt;
+		}
+
+		/**
+		 * Helper function to create a new moment.Duration.
+		 * @param amount The number of the Duration
+		 * @param time The type of Duration (e.g. "hours", "minutes", "weeks")
+		 * @returns {Duration} A Duration representing the amount of time described by the parameters
+		 */
+		private static createDuration (amount:number, time:string):Duration {
+			if (time === "weeks") {
+				return moment.duration(amount * 7, "days");
+			} else {
+				return moment.duration(amount, time);
+			}
 		}
 	}
 
@@ -59,11 +106,13 @@ module App {
 	 * The $scope of the Task model/view/controller.
 	 */
 	export interface ITaskScope extends ng.IScope {
-		tasks:Task[];
+		goal:string;
 		quantity:number;
 		frequency:number;
+		deadlineType:TimeOption;
 		hasDuration:boolean;
 		durationValue:number;
+		durationType:TimeOption;
 		viewModel:TaskController;
 	}
 
@@ -71,26 +120,26 @@ module App {
 		/**
 		 * A description of the task. Example: "Go to bed before midnight"
 		 */
-		private goal:string;
+		goal:string;
 
 		/**
 		 * How many times in a period should this task be done?
 		 */
-		private quantity:number;
+		quantity:number;
 
 		/**
 		 * How long should the task be done for?
 		 */
-		private duration:Duration;
+		duration:Duration;
 
 		/**
 		 * After how long should the task be repeated?
 		 */
-		private deadline:Duration;
+		deadline:Duration;
 
 		/**
 		 * All tasks start at level 1. Higher level tasks are more difficult than their predecessors.
 		 */
-		private level:number;
+		level:number;
 	}
 }
