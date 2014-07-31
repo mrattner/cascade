@@ -1,6 +1,6 @@
-/// <reference path="../lib/angularjs.d.ts" />
-/// <reference path="../lib/angular-route.d.ts" />
-/// <reference path="TaskController.ts" />
+/// <reference path="lib/angularjs.d.ts" />
+/// <reference path="lib/angular-route.d.ts" />
+/// <reference path="controllers/TaskController.ts" />
 
 module App {
 	var cascadeApp = angular.module("cascadeApp", ["ngRoute"]);
@@ -11,7 +11,7 @@ module App {
 		$routeProvider.when("/create", {
 			templateUrl: "partials/create-task.html",
 			controller: TaskController
-		})
-		.otherwise({redirectTo: "/create"});
+		}).
+				otherwise({redirectTo: "/create"});
 	}]);
 }

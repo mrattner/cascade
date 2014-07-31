@@ -1,7 +1,8 @@
 # Cascade
 
 Inspired by twynsicle's [Cascade](https://github.com/twynsicle/Cascade), this app will help a user track good habits
-over periods of time. Written in [Typescript](http://www.typescriptlang.org/) using [Angular JS](https://angularjs.org/).
+over periods of time. The client-side code is written in [Typescript](http://www.typescriptlang.org/) using [Angular JS](https://angularjs.org/).
+The server side is Node JS using Express, with a MongoDB data store.
 
 ## What will make this app different from other habit-tracking apps?
 
@@ -26,6 +27,6 @@ important.
 
 ## Work in progress
 
-Cascade is not finished. It is barely even started. We aren't even up to version 0. I just wanted to keep track of the
+Cascade is not finished. It is barely even started. We aren't even up to version 0.1. I just wanted to keep track of the
 app from its bare-bones beginnings and see how far I can get. Once the app actually does something, this readme will
 contain instructions for running it.
