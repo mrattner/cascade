@@ -1,4 +1,3 @@
-/// <reference path="../lib/moment.d.ts" />
 /// <reference path="../lib/angularjs.d.ts" />
 
 module App {
@@ -37,10 +36,10 @@ module App {
 				var quantity:number = this.$scope.quantity;
 				var frequency:number = this.$scope.frequency;
 				var deadlineType:string = this.$scope.deadlineType ? this.$scope.deadlineType.name : null;
-				var deadline:Duration = TaskController.createDuration(frequency, deadlineType);
+				var deadline:TimeLength = new TimeLength(frequency, deadlineType);
 				var durationValue:number = this.$scope.durationValue;
 				var durationType:string = this.$scope.durationType ? this.$scope.durationType.name : null;
-				var duration:Duration = this.$scope.hasDuration ? TaskController.createDuration(
+				var duration:TimeLength = this.$scope.hasDuration ? new TimeLength(
 						durationValue, durationType) : null;
 
 				var newTask:Task = {
@@ -48,7 +47,9 @@ module App {
 					quantity: quantity,
 					duration: duration,
 					deadline: deadline,
-					level: 1
+					level: 1,
+					lastCompleted: null,
+					dateCreated: new Date()
 				};
 
 				// Add the new task to the task "database."
@@ -77,20 +78,6 @@ module App {
 			var requiredValuesAreInts:boolean = this.$scope.quantity % 1 === 0 && this.$scope.frequency % 1 === 0;
 			var durationIsInt:boolean = this.$scope.hasDuration ? this.$scope.durationValue % 1 === 0 : true;
 			return requiredValuesAreInts && durationIsInt;
-		}
-
-		/**
-		 * Helper function to create a new moment.Duration.
-		 * @param amount The number of the Duration
-		 * @param time The type of Duration (e.g. "hours", "minutes", "weeks")
-		 * @returns {Duration} A Duration representing the amount of time described by the parameters
-		 */
-		private static createDuration (amount:number, time:string):Duration {
-			if (time === "weeks") {
-				return moment.duration(amount * 7, "days");
-			} else {
-				return moment.duration(amount, time);
-			}
 		}
 	}
 
@@ -130,16 +117,36 @@ module App {
 		/**
 		 * How long should the task be done for?
 		 */
-		duration:Duration;
+		duration:TimeLength;
 
 		/**
 		 * After how long should the task be repeated?
 		 */
-		deadline:Duration;
+		deadline:TimeLength;
 
 		/**
 		 * All tasks start at level 1. Higher level tasks are more difficult than their predecessors.
 		 */
 		level:number;
+
+		/**
+		 * When the task was last completed. Starts at 'null' if it hasn't been done yet.
+		 */
+		lastCompleted:Date;
+
+		/**
+		 * When the task was created.
+		 */
+		dateCreated:Date;
+	}
+
+	export class TimeLength {
+		amount:number;
+		time:string;
+
+		constructor (quantity:number, type:string) {
+			this.amount = quantity;
+			this.time = type;
+		}
 	}
 }
