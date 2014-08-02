@@ -1,3 +1,8 @@
 <div ng-controller="AllTasksController">
-	All tasks go here
+	<ul>
+		<li ng-repeat="task in allTasks">
+			{{task.goal}} {{task.quantity}} time(s) every {{task.deadline.amount}} {{task.deadline.time}}
+			<span ng-show="task.duration">for {{task.duration.amount}} {{task.duration.time}}</span>
+		</li>
+	</ul>
 </div>

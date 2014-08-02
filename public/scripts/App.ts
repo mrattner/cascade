@@ -1,12 +1,14 @@
 /// <reference path="lib/angularjs.d.ts" />
 /// <reference path="lib/angular-route.d.ts" />
 /// <reference path="lib/angular-resource.d.ts" />
+/// <reference path="controllers/NavController.ts" />
 /// <reference path="controllers/CreateTaskController.ts" />
 /// <reference path="controllers/AllTasksController.ts" />
 
 module App {
 	var cascadeApp = angular.module("cascadeApp", ["ngRoute", "ngResource"]);
 
+	cascadeApp.controller("NavController", NavController);
 	cascadeApp.controller("CreateTaskController", CreateTaskController);
 	cascadeApp.controller("AllTasksController", AllTasksController);
 
