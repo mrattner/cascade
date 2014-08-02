@@ -1,17 +1,37 @@
 /// <reference path="lib/angularjs.d.ts" />
 /// <reference path="lib/angular-route.d.ts" />
-/// <reference path="controllers/TaskController.ts" />
+/// <reference path="lib/angular-resource.d.ts" />
+/// <reference path="controllers/CreateTaskController.ts" />
+/// <reference path="controllers/AllTasksController.ts" />
 
 module App {
-	var cascadeApp = angular.module("cascadeApp", ["ngRoute"]);
+	var cascadeApp = angular.module("cascadeApp", ["ngRoute", "ngResource"]);
 
-	cascadeApp.controller("TaskController", TaskController);
+	cascadeApp.controller("CreateTaskController", CreateTaskController);
+	cascadeApp.controller("AllTasksController", AllTasksController);
 
 	cascadeApp.config(["$routeProvider", ($routeProvider:ng.route.IRouteProvider) => {
-		$routeProvider.when("/create", {
+		$routeProvider
+		.when("/", {
+			templateUrl: "partials/all-tasks.html",
+			controller: AllTasksController
+		})
+		.when("/create", {
 			templateUrl: "partials/create-task.html",
-			controller: TaskController
-		}).
-				otherwise({redirectTo: "/create"});
+			controller: CreateTaskController
+		})
+		.otherwise({redirectTo: "/"});
 	}]);
+
+	cascadeApp.factory("taskFactory", ($resource:ng.resource.IResourceService) : ITaskResource => {
+		// Need a custom update action because the default Angular uses is POST rather than PUT.
+		var updateAction:ng.resource.IActionDescriptor = {
+			method: "PUT",
+			isArray: false
+		};
+		// MongoDB uses _id property instead of id, so define id to be the object's _id field.
+		return <ITaskResource> $resource("/tasks/:id", {id: "@_id"}, {
+			update: updateAction
+		});
+	});
 }

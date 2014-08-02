@@ -1,28 +1,23 @@
 /// <reference path="../lib/angularjs.d.ts" />
+/// <reference path="../lib/angular-resource.d.ts" />
 
 module App {
-	export class TaskController {
-		/**
-		 * The "database" of tasks.
-		 */
-		private tasks:Task[] = [];
-
+	export class CreateTaskController {
 		/**
 		 * The options for the Select fields in the form.
 		 */
-		public DEADLINE_OPTIONS:TimeOption[] = [	{"name": "hours", "text": "hour(s)"},
-														{"name": "days", "text": "day(s)"},
-														{"name": "weeks", "text": "week(s)"}];
-		public DURATION_OPTIONS:TimeOption[] = [	{"name": "minutes", "text": "minute(s)"},
-														{"name": "hours", "text": "hour(s)"}];
+		public DEADLINE_OPTIONS:TimeOption[] = [{"name": "days", "text": "day(s)"},
+												{"name": "weeks", "text": "week(s)"}];
+		public DURATION_OPTIONS:TimeOption[] = [{"name": "minutes", "text": "minute(s)"},
+												{"name": "hours", "text": "hour(s)"}];
 
 		/**
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
 		 */
-		public static $inject = ["$scope"];
+		public static $inject = ["$scope", "$location", "taskFactory"];
 
-		constructor (private $scope:ITaskScope) {
+		constructor (private $scope:ITaskScope, private $location:ng.ILocationService, private taskFactory:ITaskResource) {
 			$scope.viewModel = this;
 		}
 
@@ -42,7 +37,8 @@ module App {
 				var duration:TimeLength = this.$scope.hasDuration ? new TimeLength(
 						durationValue, durationType) : null;
 
-				var newTask:Task = {
+				// Save the created task in the database.
+				this.taskFactory.save({
 					goal: goal,
 					quantity: quantity,
 					duration: duration,
@@ -50,20 +46,25 @@ module App {
 					level: 1,
 					lastCompleted: null,
 					dateCreated: new Date()
-				};
-
-				// Add the new task to the task "database."
-				this.tasks.push(newTask);
-
-				this.reset(form);
+				}, () => {
+					// On successful submit
+					this.reset(form);
+					this.$location.url("/"); // Redirect to home
+				}, (error:any) => {
+					console.error(error)
+				});
 			}
 		}
 
+		/**
+		 * Resets the form to its original state.
+		 * @param form The form to reset
+		 */
 		public reset (form:ng.IFormController) {
 			this.$scope.goal = null;
 			this.$scope.quantity = null;
 			this.$scope.frequency = null;
-			this.$scope.deadlineType = this.DEADLINE_OPTIONS[1];
+			this.$scope.deadlineType = this.DEADLINE_OPTIONS[0];
 			this.$scope.hasDuration = null;
 			this.$scope.durationValue = null;
 			this.$scope.durationType = this.DURATION_OPTIONS[0];
@@ -100,10 +101,10 @@ module App {
 		hasDuration:boolean;
 		durationValue:number;
 		durationType:TimeOption;
-		viewModel:TaskController;
+		viewModel:CreateTaskController;
 	}
 
-	export class Task {
+	export interface ITask extends ng.resource.IResource<ITask> {
 		/**
 		 * A description of the task. Example: "Go to bed before midnight"
 		 */
@@ -140,6 +141,9 @@ module App {
 		dateCreated:Date;
 	}
 
+	/**
+	 * Represents a length of time; for example, "2 days" or "1 week."
+	 */
 	export class TimeLength {
 		amount:number;
 		time:string;
@@ -148,5 +152,9 @@ module App {
 			this.amount = quantity;
 			this.time = type;
 		}
+	}
+
+	export interface ITaskResource extends ng.resource.IResourceClass<ITask> {
+		update(task:ITask) : ITask;
 	}
 }
