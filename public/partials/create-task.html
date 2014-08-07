@@ -8,20 +8,17 @@
 
 		<h2>How often?</h2>
 		<label>
-			<input name="quantity" ng-model="quantity" type="number" min="1" required />
+			<input name="quantity" ng-model="quantity" type="number" min="1" max="28" required />
 			time(s)
 		</label>
 
 		<label>
 			every
-			<input name="frequency" ng-model="frequency" type="number" min="1" required />
+			<select ng-model="frequency" ng-options="val.text for val in viewModel.FREQUENCY_OPTIONS" required
+					ng-init="frequency = viewModel.FREQUENCY_OPTIONS[0]">
+				<option value="">- frequency -</option>
+			</select>
 		</label>
-
-		<label for="deadline-type" hidden>Choose frequency</label>
-		<select id="deadline-type" ng-model="deadlineType" ng-options="val.text for val in viewModel.DEADLINE_OPTIONS"
-				ng-init="deadlineType = viewModel.DEADLINE_OPTIONS[1]" required>
-			<option value="">-frequency-</option>
-		</select>
 
 		<br />
 
@@ -38,7 +35,7 @@
 		<label for="duration-type" hidden>Choose duration length</label>
 		<select id="duration-type" ng-model="durationType" ng-options="val.text for val in viewModel.DURATION_OPTIONS"
 				ng-show="hasDuration" ng-required="hasDuration" ng-init="durationType = viewModel.DURATION_OPTIONS[0]">
-			<option value="">-duration-</option>
+			<option value="">- duration -</option>
 		</select>
 
 		<br />

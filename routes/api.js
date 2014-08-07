@@ -14,13 +14,13 @@ exports.createTask = function (req, res) {
 		goal: req.body.goal,
 		quantity: req.body.quantity,
 		duration: req.body.duration,
-		deadline: req.body.deadline,
+		numWeeks: req.body.numWeeks,
 		level: req.body.level,
-		lastCompleted: req.body.lastCompleted,
+		completedOn: req.body.completedOn,
 		dateCreated: req.body.dateCreated
 	});
 	newTask.save();
-	res.send(200, {message: ""});
+	res.send(200, {message: "Task created"});
 };
 
 /**

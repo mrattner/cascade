@@ -1,15 +1,17 @@
 /// <reference path="../lib/angularjs.d.ts" />
-/// <reference path="../lib/angular-resource.d.ts" />
+/// <reference path="../Task.ts" />
 
 module App {
 	export class CreateTaskController {
 		/**
 		 * The options for the Select fields in the form.
 		 */
-		public DEADLINE_OPTIONS:TimeOption[] = [{"name": "days", "text": "day(s)"},
-												{"name": "weeks", "text": "week(s)"}];
-		public DURATION_OPTIONS:TimeOption[] = [{"name": "minutes", "text": "minute(s)"},
-												{"name": "hours", "text": "hour(s)"}];
+		public FREQUENCY_OPTIONS:Option[] = [{name: "1", text:"week"},
+											{name: "2", text: "two weeks"},
+											{name: "3", text:"three weeks"},
+											{name: "4", text:"four weeks"}];
+		public DURATION_OPTIONS:Option[] = [{name: "minutes", text: "minute(s)"},
+											{name: "hours", text: "hour(s)"}];
 
 		/**
 		 * Dependencies: The same as the parameters of the constructor.
@@ -29,22 +31,19 @@ module App {
 			if (form.$valid && this.integersAreValid()) {
 				var goal:string = this.$scope.goal;
 				var quantity:number = this.$scope.quantity;
-				var frequency:number = this.$scope.frequency;
-				var deadlineType:string = this.$scope.deadlineType ? this.$scope.deadlineType.name : null;
-				var deadline:TimeLength = new TimeLength(frequency, deadlineType);
+				var numWeeks:number = this.$scope.frequency ? parseInt(this.$scope.frequency.name, 10) : null;
 				var durationValue:number = this.$scope.durationValue;
 				var durationType:string = this.$scope.durationType ? this.$scope.durationType.name : null;
-				var duration:TimeLength = this.$scope.hasDuration ? new TimeLength(
-						durationValue, durationType) : null;
+				var duration:TimeLength = this.$scope.hasDuration ? new TimeLength(durationValue, durationType) : null;
 
 				// Save the created task in the database.
 				this.taskFactory.save({
 					goal: goal,
 					quantity: quantity,
 					duration: duration,
-					deadline: deadline,
+					numWeeks: numWeeks,
 					level: 1,
-					lastCompleted: null,
+					completedOn: [],
 					dateCreated: new Date()
 				}, () => {
 					// On successful submit
@@ -64,7 +63,6 @@ module App {
 			this.$scope.goal = null;
 			this.$scope.quantity = null;
 			this.$scope.frequency = null;
-			this.$scope.deadlineType = this.DEADLINE_OPTIONS[0];
 			this.$scope.hasDuration = null;
 			this.$scope.durationValue = null;
 			this.$scope.durationType = this.DURATION_OPTIONS[0];
@@ -76,16 +74,16 @@ module App {
 		 * @returns {boolean} true if all required numbers are integers
 		 */
 		private integersAreValid ():boolean {
-			var requiredValuesAreInts:boolean = this.$scope.quantity % 1 === 0 && this.$scope.frequency % 1 === 0;
+			var quantityIsInt:boolean = this.$scope.quantity % 1 === 0;
 			var durationIsInt:boolean = this.$scope.hasDuration ? this.$scope.durationValue % 1 === 0 : true;
-			return requiredValuesAreInts && durationIsInt;
+			return quantityIsInt && durationIsInt;
 		}
 	}
 
 	/**
 	 * Interface that describes the options for a drop-down select where the options are lengths of time.
 	 */
-	export interface TimeOption {
+	export interface Option {
 		name:string;
 		text:string;
 	}
@@ -96,65 +94,10 @@ module App {
 	export interface ITaskScope extends ng.IScope {
 		goal:string;
 		quantity:number;
-		frequency:number;
-		deadlineType:TimeOption;
+		frequency:Option;
 		hasDuration:boolean;
 		durationValue:number;
-		durationType:TimeOption;
+		durationType:Option;
 		viewModel:CreateTaskController;
-	}
-
-	export interface ITask extends ng.resource.IResource<ITask> {
-		/**
-		 * A description of the task. Example: "Go to bed before midnight"
-		 */
-		goal:string;
-
-		/**
-		 * How many times in a period should this task be done?
-		 */
-		quantity:number;
-
-		/**
-		 * How long should the task be done for?
-		 */
-		duration:TimeLength;
-
-		/**
-		 * After how long should the task be repeated?
-		 */
-		deadline:TimeLength;
-
-		/**
-		 * All tasks start at level 1. Higher level tasks are more difficult than their predecessors.
-		 */
-		level:number;
-
-		/**
-		 * When the task was last completed. Starts at 'null' if it hasn't been done yet.
-		 */
-		lastCompleted:Date;
-
-		/**
-		 * When the task was created.
-		 */
-		dateCreated:Date;
-	}
-
-	/**
-	 * Represents a length of time; for example, "2 days" or "1 week."
-	 */
-	export class TimeLength {
-		amount:number;
-		time:string;
-
-		constructor (quantity:number, type:string) {
-			this.amount = quantity;
-			this.time = type;
-		}
-	}
-
-	export interface ITaskResource extends ng.resource.IResourceClass<ITask> {
-		update(task:ITask) : ITask;
 	}
 }

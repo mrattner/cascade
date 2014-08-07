@@ -122,6 +122,8 @@ interface Moment {
     day(): number;
     date(d: number): Moment;
     date(): number;
+	dayOfYear(): number;
+	dayOfYear(d: number): Moment;
     hours(h: number): Moment;
     hours(): number;
     minutes(m: number): Moment;

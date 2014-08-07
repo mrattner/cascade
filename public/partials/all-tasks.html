@@ -1,8 +1,10 @@
 <div ng-controller="AllTasksController">
+	<p>Today is {{currentDate}}</p>
 	<ul>
 		<li ng-repeat="task in allTasks">
-			{{task.goal}} {{task.quantity}} time(s) every {{task.deadline.amount}} {{task.deadline.time}}
+			{{task.goal}} {{task.quantity}} time(s) every {{task.numWeeks}} week(s)
 			<span ng-show="task.duration">for {{task.duration.amount}} {{task.duration.time}}</span>
 		</li>
 	</ul>
+	<code>{{periods}}</code>
 </div>
