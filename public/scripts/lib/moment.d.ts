@@ -98,7 +98,7 @@ interface Moment {
     add(duration: Duration): Moment;
 
     subtract(input: MomentInput): Moment;
-    subtract(unitOfTime: string, amount: number): Moment;
+    subtract(amount: number, unitOfTime: string): Moment;
 
     calendar(): string;
     clone(): Moment;

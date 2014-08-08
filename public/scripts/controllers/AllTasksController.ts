@@ -34,11 +34,11 @@ module App {
 			var daysPerCycle:number = task.numWeeks ? task.numWeeks * 7 : 7; // default to a cycle of 1 week
 			var daysSinceCreated:number = Math.floor(moment().diff(dateCreated, "seconds") / (24 * 60 * 60));
 			var daysIntoCycle:number = daysSinceCreated % (daysPerCycle);
-			var fromDate:Moment = moment().subtract("days", daysPerCycle * cyclesAgo);
+			var fromDate:Moment = moment().subtract(daysPerCycle * cyclesAgo, "days");
 
 			var period:DayTask[] = [];
 			for (var i:number=0; i<=daysIntoCycle; i++) {
-				var iDaysAgo:Moment = fromDate.subtract("days", i);
+				var iDaysAgo:Moment = moment(fromDate).subtract(i, "days");
 				period.push({day: iDaysAgo, timesCompleted: 0});
 			}
 
