@@ -28,9 +28,11 @@ module App {
 				level: FakeTaskController.randomInt(1, 5),
 				completedOn: dateArray,
 				dateCreated: dateArray[dateArray.length - 1]
-			}).$promise.then(() => {
+			}, () => {
 				// On successful submit
 				console.log("Fake task created");
+			}, (error:any) => {
+				console.error(error)
 			});
 		}
 

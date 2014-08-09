@@ -45,12 +45,10 @@ module App {
 					level: 1,
 					completedOn: [],
 					dateCreated: new Date()
-				}, () => {
+				}).$promise.then(() => {
 					// On successful submit
 					this.reset(form);
 					this.$location.url("/"); // Redirect to home
-				}, (error:any) => {
-					console.error(error)
 				});
 			}
 		}
