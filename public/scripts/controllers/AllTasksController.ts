@@ -64,6 +64,24 @@ module App {
 				success: success
 			}
 		}
+
+		/**
+		 * Deletes a task from the database.
+		 * @param taskId The database ID of the task to delete
+		 * @param index The index within the task list
+		 */
+		public deleteTask (taskId:string, index:number) {
+			this.taskFactory.delete({id: taskId}).$promise.then(() => {
+				// Remove the task from the allTasks list and the periods list.
+				this.$scope.allTasks.some((task:any, index:number) => {
+					if (task._id === taskId) {
+						this.$scope.allTasks.splice(index, 1);
+						this.$scope.periods.splice(index, 1);
+						return true;
+					}
+				});
+			});
+		}
 	}
 
 	/**

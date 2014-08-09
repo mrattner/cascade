@@ -39,7 +39,7 @@ exports.listTasks = function (req, res) {
 };
 
 /**
- * Delete the task with the given ID.
+ * Delete the task with the given ID. (DELETE)
  * @param req The request object; should include a task ID parameter
  * @param res The response object
  */
