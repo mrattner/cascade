@@ -4,6 +4,11 @@
 
 module App {
 	export class FakeTaskController {
+		private static MAX_QUANTITY = 3;
+		private static MAX_WEEK_INTERVAL = 2;
+		private static MAX_DAY_INTERVAL = 2;
+		private static MAX_DAYS_AGO = 100;
+
 		/**
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
@@ -22,17 +27,15 @@ module App {
 
 			this.taskFactory.save({
 				goal: "Fake task name",
-				quantity: FakeTaskController.randomInt(1, 29),
+				quantity: FakeTaskController.randomInt(1, FakeTaskController.MAX_QUANTITY + 1),
 				duration: FakeTaskController.generateRandomDuration(),
-				numWeeks: FakeTaskController.randomInt(1, 5),
+				numWeeks: FakeTaskController.randomInt(1, FakeTaskController.MAX_WEEK_INTERVAL + 1),
 				level: FakeTaskController.randomInt(1, 5),
 				completedOn: dateArray,
-				dateCreated: dateArray[dateArray.length - 1]
-			}, () => {
+				dateCreated: dateArray[0]
+			}).$promise.then(() => {
 				// On successful submit
 				console.log("Fake task created");
-			}, (error:any) => {
-				console.error(error)
 			});
 		}
 
@@ -51,17 +54,18 @@ module App {
 		 * @returns {null} Either null or a TimeLength of 20 minutes
 		 */
 		private static generateRandomDuration ():TimeLength {
-			var random:number = FakeTaskController.randomInt(0, 1);
+			var random:number = FakeTaskController.randomInt(0, 2);
 			return random === 0 ? null : {amount: 20, time: "minutes"};
 		}
 
 		/**
 		 * Pseudo-randomly generates an array of dates when the fake task was completed.
-		 * @returns {Date[]} Dates starting up to 100 days ago that are between 1 and 7 days apart
+		 * @returns {Date[]} Dates starting up to MAX_DAYS_AGO days ago that are between 1 and MAX_DAY_INTERVAL days
+		 * apart
 		 */
 		private static generateRandomDateArray ():Date[] {
 			var startDate:Moment = moment(FakeTaskController.generateRandomDate());
-			var dayInterval:number = FakeTaskController.randomInt(1, 8);
+			var dayInterval:number = FakeTaskController.randomInt(1, FakeTaskController.MAX_DAY_INTERVAL + 1);
 			var dates:Date[] = [];
 			var daysAgo:number = moment().diff(startDate, "days");
 			for (var i:number=daysAgo; i >= 0; i -= dayInterval) {
@@ -73,10 +77,10 @@ module App {
 
 		/**
 		 * Pseudo-randomly generates a date.
-		 * @returns {Date} A date between today and 100 days ago
+		 * @returns {Date} A date between today and MAX_DAYS_AGO days ago
 		 */
 		private static generateRandomDate ():Date {
-			var randomDay:number = FakeTaskController.randomInt(0, 101);
+			var randomDay:number = FakeTaskController.randomInt(0, FakeTaskController.MAX_DAYS_AGO + 1);
 			var date:Moment = moment().subtract(randomDay, "days");
 			return date.toDate();
 		}
