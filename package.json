@@ -13,7 +13,7 @@
 		"cookie-parser": "~1.0.1",
 		"body-parser": "~1.0.0",
 		"debug": "~0.7.4",
-		"mongodb": ">=0.9.6-7",
-		"mongoose": "3.x"
+		"mongoose": "3.x",
+		"bcrypt": "~0.8.0"
 	}
 }

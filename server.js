@@ -16,6 +16,9 @@ var api = require("./routes/api");
 var router = express.Router();
 
 router.get("/", routes); // Index page
+router.post("/users", api.createUser);
+router.get("/users", api.listUsers);
+router.delete("/users/:userId", api.deleteUser);
 router.post("/tasks", api.createTask);
 router.get("/tasks", api.listTasks);
 router.delete("/tasks/:taskId", api.deleteTask);
