@@ -48,7 +48,7 @@ module App {
 				}).$promise.then(() => {
 					// On successful submit
 					this.reset(form);
-					this.$location.url("/"); // Redirect to home
+					this.$location.url("/tasks"); // Redirect to tasks view
 				});
 			}
 		}
@@ -57,7 +57,7 @@ module App {
 		 * Resets the form to its original state.
 		 * @param form The form to reset
 		 */
-		public reset (form:ng.IFormController) {
+		public reset (form:ng.IFormController):void {
 			this.$scope.goal = null;
 			this.$scope.quantity = null;
 			this.$scope.frequency = null;

@@ -13,11 +13,15 @@ module App {
 		}
 
 		public viewAllTasks ():void {
-			this.$location.url("/");
+			this.$location.url("/tasks");
 		}
 
 		public createTask ():void {
 			this.$location.url("/create");
+		}
+
+		public signup ():void {
+			this.$location.url("/signup");
 		}
 	}
 

@@ -1,0 +1,17 @@
+<div ng-controller="UserController">
+	<h1>Sign Up for a Cascade Account</h1>
+	<form name="newUser" ng-submit="viewModel.submit(newUser)">
+		<label>
+			Desired username
+			<input ng-model="username" type="text" required />
+		</label>
+		<div ng-show="alreadyTaken">That username is already taken.</div>
+		<br/>
+		<label>
+			Password
+			<input ng-model="password" type="password" required />
+		</label>
+		<br/>
+		<button>Create Account</button>
+	</form>
+</div>

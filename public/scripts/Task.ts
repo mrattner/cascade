@@ -52,6 +52,6 @@ module App {
 	}
 
 	export interface ITaskResource extends ng.resource.IResourceClass<ITask> {
-		update(task:ITask) : ITask;
+		update (task:ITask):ITask;
 	}
 }
