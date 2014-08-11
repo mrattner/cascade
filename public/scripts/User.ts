@@ -1,0 +1,24 @@
+/// <reference path="lib/angular-resource.d.ts" />
+
+module App {
+	export interface IUser extends ng.resource.IResource<IUser> {
+		/**
+		 * Unique identifier for the user.
+		 */
+		username:string;
+
+		/**
+		 * The user's password, which will be hashed and salted when stored in the database.
+		 */
+		password:string;
+
+		/**
+		 * The date on which the account was created.
+		 */
+		dateCreated:Date;
+	}
+
+	export interface IUserResource extends ng.resource.IResourceClass<IUser> {
+		update (user:IUser):IUser;
+	}
+}

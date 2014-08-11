@@ -6,6 +6,7 @@
 </head>
 <body>
 	<nav ng-controller="NavController">
+		<button ng-click="viewModel.signup()">Sign Up</button>
 		<button ng-click="viewModel.viewAllTasks()">All Tasks</button>
 		<button ng-click="viewModel.createTask()">New Task</button>
 	</nav>
@@ -18,6 +19,7 @@
 <script type="text/javascript" src="http://momentjs.com/downloads/moment.js"></script>
 <script type="text/javascript" src="scripts/Task.js"></script>
 <script type="text/javascript" src="scripts/controllers/NavController.js"></script>
+<script type="text/javascript" src="scripts/controllers/UserController.js"></script>
 <script type="text/javascript" src="scripts/controllers/CreateTaskController.js"></script>
 <script type="text/javascript" src="scripts/controllers/AllTasksController.js"></script>
 <script type="text/javascript" src="scripts/controllers/FakeTaskController.js"></script>
