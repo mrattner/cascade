@@ -135,7 +135,7 @@ exports.createTask = function (req, res) {
  * @param res The response object
  */
 exports.listTasks = function (req, res) {
-	Task.find(function (err, tasks) {
+	Task.find({creator: req.user._id}, function (err, tasks) {
 		if (err) {
 			res.send(500, {message: "Error while getting list of tasks"});
 		} else {
