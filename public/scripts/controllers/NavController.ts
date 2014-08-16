@@ -1,4 +1,5 @@
 /// <reference path="../lib/angularjs.d.ts" />
+/// <reference path="../User.ts" />
 
 module App {
 	export class NavController {
@@ -6,10 +7,12 @@ module App {
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
 		 */
-		public static $inject = ["$scope", "$location"];
+		public static $inject = ["$scope", "$location", "$http", "currentUser"];
 
-		constructor (private $scope:INavScope, private $location:ng.ILocationService) {
+		constructor (private $scope:INavScope, private $location:ng.ILocationService, private $http:ng.IHttpService,
+				private currentUser:IUser) {
 			$scope.viewModel = this;
+			$scope.currentUser = currentUser;
 		}
 
 		public viewAllTasks ():void {
@@ -20,8 +23,10 @@ module App {
 			this.$location.url("/create");
 		}
 
-		public signup ():void {
-			this.$location.url("/signup");
+		public logout ():void {
+			this.$http.post("/logout", {}).success(() => {
+				this.$location.url("/login");
+			});
 		}
 	}
 
@@ -30,5 +35,6 @@ module App {
 	 */
 	export interface INavScope extends ng.IScope {
 		viewModel:NavController;
+		currentUser:IUser;
 	}
 }

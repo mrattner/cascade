@@ -1,0 +1,10 @@
+<div>
+	<nav ng-if="currentUser">
+		<button ng-click="viewModel.viewAllTasks()">All Tasks</button>
+		<button ng-click="viewModel.createTask()">New Task</button>
+		<button ng-click="viewModel.logout()">Logout</button>
+		<div>Logged in as {{currentUser.username}}</div>
+	</nav>
+	<div ui-view></div>
+	<footer>&copy;2014 Steven Lemon and Marcy Rattner</footer>
+</div>

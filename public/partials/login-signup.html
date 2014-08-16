@@ -1,0 +1,23 @@
+<div>
+	<form name="user">
+		<div ng-if="message">{{message}}</div>
+
+		<label name="signup">
+			<input type="checkbox" ng-model="signup" />
+			New account
+		</label>
+		<br />
+		<label>
+			Username
+			<input ng-model="username" name="username" type="text" required />
+		</label>
+		<br />
+		<label>
+			Password
+			<input ng-model="password" name="password" type="password" required />
+		</label>
+		<br />
+		<button ng-hide="signup" ng-click="viewModel.submit(user)">Login</button>
+		<button ng-show="signup" ng-click="viewModel.submit(user)">Create account</button>
+	</form>
+</div>
