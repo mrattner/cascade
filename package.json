@@ -14,6 +14,10 @@
 		"body-parser": "~1.0.0",
 		"debug": "~0.7.4",
 		"mongoose": "3.x",
-		"bcrypt": "~0.8.0"
+		"bcrypt": "~0.8.0",
+		"passport": "~0.2.0",
+		"passport-local": "~1.0.0",
+		"express-session": "~1.7.5",
+		"mongoose-session": "~0.0.1"
 	}
 }

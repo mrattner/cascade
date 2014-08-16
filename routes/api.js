@@ -8,6 +8,29 @@ var Task = require("../models/task");
 var User = require("../models/user");
 
 /**
+ * Retrieve the information of the currently logged in user. (GET)
+ * @param req The request object
+ * @param res The response object; responds with "false" if no user is logged in
+ */
+exports.getLoggedInUser = function (req, res) {
+	if (req.isAuthenticated()) {
+		res.send(req.user);
+	} else {
+		res.send(false);
+	}
+};
+
+/**
+ * Log out of Cascade.
+ * @param req The request object
+ * @param res The response object
+ */
+exports.logout = function (req, res) {
+	req.logOut();
+	res.send(200, {message: "Successfully logged out"});
+};
+
+/**
  * Create a new user. (POST)
  * @param req The request object; body should contain all the data of the new user according to the User schema
  * @param res The response object
@@ -58,6 +81,11 @@ exports.listUsers = function (req, res) {
 	});
 };
 
+/**
+ * Delete the user with the given ID. (DELETE)
+ * @param req The request object; should include a user ID parameter
+ * @param res The response object
+ */
 exports.deleteUser = function (req, res) {
 	var userToDelete = req.params[0];
 	User.findOne({id: userToDelete}, function (err, user) {

@@ -1,11 +1,8 @@
-var express = require("express");
-var router = express.Router();
-
 /**
- * When the route is '/', serve the index page.
+ * Render the login/signup page.
+ * @param req The request object
+ * @param res The response object
  */
-router.get("/", function(req, res) {
+exports.display = function (req, res) {
   res.sendfile("./public/index.html");
-});
-
-module.exports = router;
+};
