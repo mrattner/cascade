@@ -51,7 +51,8 @@ exports.createUser = function (req, res) {
 					var newUser = new User({
 						username: username,
 						password: hash,
-						dateCreated: req.body.dateCreated
+						dateCreated: req.body.dateCreated,
+						tasks: []
 					});
 					newUser.save(function (err) {
 						if (err) {
@@ -110,6 +111,7 @@ exports.deleteUser = function (req, res) {
  */
 exports.createTask = function (req, res) {
 	var newTask = new Task({
+		creator: req.body.creator,
 		goal: req.body.goal,
 		quantity: req.body.quantity,
 		duration: req.body.duration,

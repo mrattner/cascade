@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 
 var taskSchema = new mongoose.Schema({
+	creator: {type: String, ref: "User"},
 	goal: String,
 	category: String,
 	quantity: Number,

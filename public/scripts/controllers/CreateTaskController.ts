@@ -1,5 +1,6 @@
 /// <reference path="../lib/angularjs.d.ts" />
 /// <reference path="../Task.ts" />
+/// <reference path="../User.ts" />
 
 module App {
 	export class CreateTaskController {
@@ -17,10 +18,12 @@ module App {
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
 		 */
-		public static $inject = ["$scope", "$location", "taskFactory"];
+		public static $inject = ["$scope", "$location", "taskFactory", "currentUser"];
 
-		constructor (private $scope:ITaskScope, private $location:ng.ILocationService, private taskFactory:ITaskResource) {
+		constructor (private $scope:ITaskScope, private $location:ng.ILocationService, private taskFactory:ITaskResource,
+				private currentUser:IUser) {
 			$scope.viewModel = this;
+			$scope.currentUser = currentUser;
 		}
 
 		/**
@@ -29,6 +32,7 @@ module App {
 		 */
 		public submit (form:ng.IFormController):void {
 			if (form.$valid && this.integersAreValid()) {
+				var currentUser = this.$scope.currentUser;
 				var goal:string = this.$scope.goal;
 				var quantity:number = this.$scope.quantity;
 				var numWeeks:number = this.$scope.frequency ? parseInt(this.$scope.frequency.name, 10) : null;
@@ -38,6 +42,7 @@ module App {
 
 				// Save the created task in the database.
 				this.taskFactory.save({
+					creator: currentUser._id,
 					goal: goal,
 					quantity: quantity,
 					duration: duration,
@@ -90,6 +95,7 @@ module App {
 	 * The $scope of the Task model/view/controller.
 	 */
 	export interface ITaskScope extends ng.IScope {
+		currentUser:any;
 		goal:string;
 		quantity:number;
 		frequency:Option;

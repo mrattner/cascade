@@ -3,6 +3,11 @@
 module App {
 	export interface ITask extends ng.resource.IResource<ITask> {
 		/**
+		 * The ID of the user who created the task.
+		 */
+		creator:string;
+
+		/**
 		 * A description of the task. Example: "Go to bed before midnight"
 		 */
 		goal:string;

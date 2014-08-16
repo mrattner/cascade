@@ -64,14 +64,12 @@ module App {
 			.state("nav.tasks", {
 				url: "/tasks",
 				templateUrl: "partials/all-tasks.html",
-				controller: AllTasksController,
-				resolve: {currentUser: checkLoggedIn}
+				controller: AllTasksController
 			})
 			.state("nav.create", {
 				url: "/create",
 				templateUrl: "partials/create-task.html",
-				controller: CreateTaskController,
-				resolve: {currentUser: checkLoggedIn}
+				controller: CreateTaskController
 			});
 		}
 	]);

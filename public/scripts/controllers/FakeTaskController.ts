@@ -26,6 +26,7 @@ module App {
 			var dateArray:Date[] = FakeTaskController.generateRandomDateArray();
 
 			this.taskFactory.save({
+				creator: 0, //TODO
 				goal: "Fake task name",
 				quantity: FakeTaskController.randomInt(1, FakeTaskController.MAX_QUANTITY + 1),
 				duration: FakeTaskController.generateRandomDuration(),

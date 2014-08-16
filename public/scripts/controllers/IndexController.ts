@@ -26,7 +26,8 @@ module App {
 					this.$http.post("/users", {
 						username: username,
 						password: password,
-						dateCreated: new Date()
+						dateCreated: new Date(),
+						tasks: []
 					}).success(() => {
 						// On successful submit
 						this.reset(form);
