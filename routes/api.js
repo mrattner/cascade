@@ -151,9 +151,11 @@ exports.listTasks = function (req, res) {
  */
 exports.deleteTask = function (req, res) {
 	var taskToDelete = req.params[0];
-	Task.findOne({id: taskToDelete}, function (err, task) {
+	Task.findOne({id: taskToDelete, creator: req.user._id}, function (err, task) {
 		if (err) {
 			res.send(500, {message: "Error while getting task"});
+		} else if (!task) {
+			res.send(404, {message: "Task not found"});
 		} else {
 			task.remove(function (err) {
 				if (err) {
