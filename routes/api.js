@@ -129,6 +129,38 @@ exports.createTask = function (req, res) {
 };
 
 /**
+ * Update a task. (PUT)
+ * @param req The request object; should include a task ID parameter and body should contain new data for the task
+ * according to the Task schema
+ * @param res The response object
+ */
+exports.updateTask = function (req, res) {
+	var taskToUpdate = req.params[0];
+	Task.findOne({id: taskToUpdate, creator: req.user._id}, function (err, task) {
+		if (err) {
+			res.send(500, {message: "Error while getting task"});
+		} else if (!task) {
+			res.send(404, {message: "Task not found"});
+		} else {
+			task.goal = req.body.goal ? req.body.goal : task.goal;
+			task.quantity = req.body.quantity ? req.body.quantity : task.quantity;
+			task.duration = req.body.duration ? req.body.duration : task.duration;
+			task.numWeeks = req.body.numWeeks ? req.body.numWeeks : task.numWeeks;
+			task.level = req.body.level ? req.body.level : task.level;
+			task.completedOn = req.body.completedOn ? task.completedOn.concat(req.body.completedOn) : task.completedOn;
+
+			task.save(function (err) {
+				if (err) {
+					res.send(500, {message: "Error while updating task"});
+				} else {
+					res.send(200, {message: "Task updated"});
+				}
+			});
+		}
+	});
+};
+
+/**
  * Get list of all tasks. (GET)
  * @param req The request object
  * @param res The response object

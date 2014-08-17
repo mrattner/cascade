@@ -44,6 +44,7 @@ router.post("/login", passport.authenticate("local", {successRedirect: "/", fail
 router.get("/users", checkAuth, api.listUsers);
 router.delete("/users/:userId", checkAuth, api.deleteUser);
 router.post("/tasks", checkAuth, api.createTask);
+router.put("/tasks/:taskId", checkAuth, api.updateTask);
 router.get("/tasks", checkAuth, api.listTasks);
 router.delete("/tasks/:taskId", checkAuth, api.deleteTask);
 
