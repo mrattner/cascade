@@ -17,11 +17,6 @@ module App {
 		 * The date on which the account was created.
 		 */
 		dateCreated:Date;
-
-		/**
-		 * The IDs of tasks owned by this user.
-		 */
-		tasks:string[];
 	}
 
 	export interface IUserResource extends ng.resource.IResourceClass<IUser> {

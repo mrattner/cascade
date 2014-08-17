@@ -51,8 +51,7 @@ exports.createUser = function (req, res) {
 					var newUser = new User({
 						username: username,
 						password: hash,
-						dateCreated: req.body.dateCreated,
-						tasks: []
+						dateCreated: req.body.dateCreated
 					});
 					newUser.save(function (err) {
 						if (err) {
