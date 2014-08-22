@@ -13,10 +13,11 @@ module App {
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
 		 */
-		public static $inject = ["$scope", "taskFactory"];
+		public static $inject = ["$scope", "taskFactory", "currentUser"];
 
-		constructor (private $scope:IFakeTaskScope, private taskFactory:ITaskResource) {
+		constructor (private $scope:IFakeTaskScope, private taskFactory:ITaskResource, private currentUser:any) {
 			$scope.viewModel = this;
+			$scope.currentUser = currentUser;
 		}
 
 		/**
@@ -26,7 +27,7 @@ module App {
 			var dateArray:Date[] = FakeTaskController.generateRandomDateArray();
 
 			this.taskFactory.save({
-				creator: 0, //TODO
+				creator: this.$scope.currentUser._id,
 				goal: "Fake task name",
 				quantity: FakeTaskController.randomInt(1, FakeTaskController.MAX_QUANTITY + 1),
 				duration: FakeTaskController.generateRandomDuration(),
@@ -92,5 +93,6 @@ module App {
 	 */
 	export interface IFakeTaskScope extends ng.IScope {
 		viewModel:FakeTaskController;
+		currentUser:any;
 	}
 }

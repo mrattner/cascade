@@ -1,4 +1,5 @@
 /// <reference path="../lib/angularjs.d.ts" />
+/// <reference path="../lib/angular-ui-router.d.ts" />
 /// <reference path="../Task.ts" />
 /// <reference path="../User.ts" />
 
@@ -18,12 +19,13 @@ module App {
 		 * Dependencies: The same as the parameters of the constructor.
 		 * @type {string[]} The names of dependencies passed as parameters to the constructor of this class
 		 */
-		public static $inject = ["$scope", "$location", "taskFactory", "currentUser"];
+		public static $inject = ["$scope", "$location", "$state", "taskFactory", "currentUser"];
 
-		constructor (private $scope:ITaskScope, private $location:ng.ILocationService, private taskFactory:ITaskResource,
-				private currentUser:IUser) {
+		constructor (private $scope:ITaskScope, private $location:ng.ILocationService, private $state:ng.ui.IStateService,
+					 private taskFactory:ITaskResource, private currentUser:IUser) {
 			$scope.viewModel = this;
 			$scope.currentUser = currentUser;
+			$state.transitionTo("nav.create.fake");
 		}
 
 		/**

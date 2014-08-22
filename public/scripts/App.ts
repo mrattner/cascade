@@ -72,6 +72,10 @@ module App {
 				templateUrl: "partials/create-task.html",
 				controller: CreateTaskController,
 				resolve: {loggedIn: checkLoggedIn}
+			})
+			.state("nav.create.fake", {
+				template: '<button ng-click="viewModel.createFakeTask()">Create Fake Task</button>',
+				controller: FakeTaskController
 			});
 		}
 	]);
