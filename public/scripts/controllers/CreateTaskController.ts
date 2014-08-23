@@ -9,9 +9,8 @@ module App {
 		 * The options for the Select fields in the form.
 		 */
 		public FREQUENCY_OPTIONS:Option[] = [{name: "1", text:"week"},
-											{name: "2", text: "two weeks"},
-											{name: "3", text:"three weeks"},
-											{name: "4", text:"four weeks"}];
+											{name: "2", text: "fortnight"},
+											{name: "4", text:"month"}];
 		public DURATION_OPTIONS:Option[] = [{name: "minutes", text: "minute(s)"},
 											{name: "hours", text: "hour(s)"}];
 

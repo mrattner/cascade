@@ -6,12 +6,14 @@
 			{{period.task.goal}} {{period.task.quantity}} time(s) every {{period.task.numWeeks}} week(s)
 			<span ng-show="period.task.duration">for {{period.task.duration.amount}} {{period.task.duration.time}}</span>
 			<button ng-click="viewModel.deleteTask(period.task._id)">X</button>
-			<ol class="period" ng-class="{successful: period.success}">
-				<li ng-repeat="day in period.days" ng-class="{today: $first}">
-					<span class="date">{{day.day.format("D-M")}}</span>
-					<span class="completes">{{day.timesCompleted}}</span>
-				</li>
-			</ol>
+			<div class="period" ng-class="{successful: period.success}">
+				<div ng-repeat="day in period.days" ng-class="{today: $first}">
+					<label>
+						{{day.day.format("D-M")}}
+						<input id="complete" type="checkbox" class="complete" ng-model="day.complete" />
+					</label>
+				</div>
+			</div>
 		</li>
 	</ul>
 </div>

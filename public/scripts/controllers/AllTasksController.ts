@@ -39,10 +39,10 @@ module App {
 			var period:DayTask[] = [];
 			for (var i:number=0; i<=daysIntoCycle; i++) {
 				var iDaysAgo:Moment = moment(fromDate).subtract(i, "days");
-				period.push({day: iDaysAgo, timesCompleted: 0});
+				period.push({day: iDaysAgo, complete: false});
 			}
 
-			// Fill in the days with how many times the task was completed that day.
+			// Check the days on which the task was completed.
 			var timesCompleted:number = 0;
 			task.completedOn.forEach((date) => {
 				var momentDate = moment(date);
@@ -50,7 +50,7 @@ module App {
 					var dayMoment:Moment = day.day;
 					if (dayMoment.dayOfYear() === momentDate.dayOfYear() && dayMoment.year() === momentDate.year()) {
 						timesCompleted++;
-						day.timesCompleted++;
+						day.complete = true;
 						return true;
 					}
 				});
@@ -89,7 +89,7 @@ module App {
 	 */
 	export interface DayTask {
 		day:Moment;
-		timesCompleted:number;
+		complete:boolean;
 	}
 
 	/**
