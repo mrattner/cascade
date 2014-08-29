@@ -27,7 +27,7 @@ module App {
 		 * Creates a representation of 1 task cycle. For example, if a task repeats every 3 weeks, a cycle is 3 weeks.
 		 * @param task The task for which to generate a period
 		 * @param cyclesAgo Defaults to 0 (i.e. the period that contains today's date)
-		 * @returns {{task: ITask, days: DayTask[], success: boolean}} A representation of a task cycle
+		 * @returns {TaskPeriod} A representation of a task cycle
 		 */
 		public static createPeriod (task:ITask, cyclesAgo:number=0):TaskPeriod {
 			var dateCreated:Moment = moment(task.dateCreated);
@@ -43,10 +43,27 @@ module App {
 			}
 
 			// Check the days on which the task was completed.
+			var newPeriod:TaskPeriod = {
+				task: task,
+				days: period,
+				success: false
+			};
+
+			newPeriod.success = AllTasksController.checkSuccess(newPeriod);
+
+			return newPeriod;
+		}
+
+		/**
+		 * Returns true if the period's task has been completed enough times.
+		 * @param period A period of time with an associated task
+		 * @returns {boolean} true if the task was completed the target number of times in the period
+		 */
+		private static checkSuccess (period:TaskPeriod):boolean {
 			var timesCompleted:number = 0;
-			task.completedOn.forEach((date) => {
+			period.task.completedOn.forEach((date) => {
 				var momentDate = moment(date);
-				period.some((day:DayTask) => {
+				period.days.some((day:DayTask) => {
 					var dayMoment:Moment = day.day;
 					if (dayMoment.dayOfYear() === momentDate.dayOfYear() && dayMoment.year() === momentDate.year()) {
 						timesCompleted++;
@@ -56,21 +73,42 @@ module App {
 				});
 			});
 
-			var success:boolean = task.quantity && timesCompleted >= task.quantity;
+			return (period.task.quantity) && (timesCompleted >= period.task.quantity);
+		}
 
-			return {
-				task: task,
-				days: period,
-				success: success
+		/**
+		 * Mark a task as complete on a certain day.
+		 * @param period The period associated with this task
+		 * @param day The day on which the task was completed
+		 * @param complete True if the task is completed; false if the task should be uncompleted
+		 */
+		public completeTask (period:TaskPeriod, day:Moment, complete:boolean) {
+			var task:ITask = period.task;
+			if (complete) {
+				task.completedOn.push(day.toDate());
+				this.taskFactory.update(task);
+			} else {
+				var i:number = -1;
+				task.completedOn.some((date, index) => {
+					var momentDate:Moment = moment(date);
+					if (momentDate.isSame(day, "day")) {
+						i = index;
+						return true;
+					}
+				});
+				if (i > -1) {
+					task.completedOn.splice(i, 1);
+					this.taskFactory.update(task);
+				}
 			}
+			period.success = AllTasksController.checkSuccess(period);
 		}
 
 		/**
 		 * Deletes a task from the database.
 		 * @param taskId The database ID of the task to delete
-		 * @param index The index within the task list
 		 */
-		public deleteTask (taskId:string, index:number) {
+		public deleteTask (taskId:string) {
 			this.taskFactory.delete({id: taskId}).$promise.then(() => {
 				// Remove the task from the allTasks list and the periods list.
 				this.$scope.allTasks.some((task:any, index:number) => {

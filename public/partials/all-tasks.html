@@ -10,7 +10,8 @@
 				<div ng-repeat="day in period.days" ng-class="{today: $first}">
 					<label>
 						{{day.day.format("D-M")}}
-						<input id="complete" type="checkbox" class="complete" ng-model="day.complete" />
+						<input id="complete" type="checkbox" class="complete" ng-model="day.complete"
+								ng-click="viewModel.completeTask(period, day.day, !day.complete)" />
 					</label>
 				</div>
 			</div>

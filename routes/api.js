@@ -147,7 +147,7 @@ exports.updateTask = function (req, res) {
 			task.duration = req.body.duration ? req.body.duration : task.duration;
 			task.numWeeks = req.body.numWeeks ? req.body.numWeeks : task.numWeeks;
 			task.level = req.body.level ? req.body.level : task.level;
-			task.completedOn = req.body.completedOn ? task.completedOn.concat(req.body.completedOn) : task.completedOn;
+			task.completedOn = req.body.completedOn ? req.body.completedOn : task.completedOn;
 
 			task.save(function (err) {
 				if (err) {
