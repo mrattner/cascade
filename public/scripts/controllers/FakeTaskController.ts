@@ -4,10 +4,13 @@
 
 module App {
 	export class FakeTaskController {
-		private static MAX_QUANTITY = 3;
-		private static MAX_WEEK_INTERVAL = 2;
-		private static MAX_DAY_INTERVAL = 2;
-		private static MAX_DAYS_AGO = 100;
+		private static MAX_QUANTITY:number = 7;
+		private static MAX_WEEK_INTERVAL:number = 4;
+		private static MAX_DAY_INTERVAL:number = 5;
+		private static MAX_DAYS_AGO:number = 100;
+		private static VERBS:string[] = ["bake", "walk", "throw", "kick", "draw", "serve", "wash", "discuss", "ponder"];
+		private static JOINERS:string[] = ["the", "some", "Steve's", "Anna's", "Keesha's", "Ralphie's", "my", "your"];
+		private static NOUNS:string[] = ["cookies", "puppies", "milk", "hair", "socks", "poetry", "fruit", "birds"];
 
 		/**
 		 * Dependencies: The same as the parameters of the constructor.
@@ -28,7 +31,7 @@ module App {
 
 			this.taskFactory.save({
 				creator: this.$scope.currentUser._id,
-				goal: "Fake task name",
+				goal: FakeTaskController.randomGoal(),
 				quantity: FakeTaskController.randomInt(1, FakeTaskController.MAX_QUANTITY + 1),
 				duration: FakeTaskController.generateRandomDuration(),
 				numWeeks: FakeTaskController.randomInt(1, FakeTaskController.MAX_WEEK_INTERVAL + 1),
@@ -39,6 +42,22 @@ module App {
 				// On successful submit
 				console.log("Fake task created");
 			});
+		}
+
+		/**
+		 * Generates a pseudo-random fake task name from a limited dictionary of words.
+		 * @returns {string} A fake goal for the task name
+		 */
+		private static randomGoal ():string {
+			var randomVerb:number = FakeTaskController.randomInt(0, FakeTaskController.VERBS.length);
+			var randomJoiner:number = FakeTaskController.randomInt(0, FakeTaskController.JOINERS.length);
+			var randomNoun:number = FakeTaskController.randomInt(0, FakeTaskController.NOUNS.length);
+
+			var verb:string = FakeTaskController.VERBS[randomVerb];
+			var joiner:string = FakeTaskController.JOINERS[randomJoiner];
+			var noun:string = FakeTaskController.NOUNS[randomNoun];
+
+			return verb + " " + joiner + " " + noun;
 		}
 
 		/**
