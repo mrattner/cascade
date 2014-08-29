@@ -87,10 +87,12 @@ exports.listUsers = function (req, res) {
  * @param res The response object
  */
 exports.deleteUser = function (req, res) {
-	var userToDelete = req.params[0];
-	User.findOne({id: userToDelete}, function (err, user) {
+	var userToDelete = req.params.userId;
+	User.findOne({_id: userToDelete}, function (err, user) {
 		if (err) {
 			res.send(500, {message: "Error while getting user"});
+		} else if (!user) {
+			res.send(404, {message: "User not found"});
 		} else {
 			user.remove(function (err) {
 				if (err) {
@@ -135,8 +137,8 @@ exports.createTask = function (req, res) {
  * @param res The response object
  */
 exports.updateTask = function (req, res) {
-	var taskToUpdate = req.params[0];
-	Task.findOne({id: taskToUpdate, creator: req.user._id}, function (err, task) {
+	var taskToUpdate = req.params.taskId;
+	Task.findOne({_id: taskToUpdate, creator: req.user._id}, function (err, task) {
 		if (err) {
 			res.send(500, {message: "Error while getting task"});
 		} else if (!task) {
@@ -181,8 +183,8 @@ exports.listTasks = function (req, res) {
  * @param res The response object
  */
 exports.deleteTask = function (req, res) {
-	var taskToDelete = req.params[0];
-	Task.findOne({id: taskToDelete, creator: req.user._id}, function (err, task) {
+	var taskToDelete = req.params.taskId;
+	Task.findOne({_id: taskToDelete, creator: req.user._id}, function (err, task) {
 		if (err) {
 			res.send(500, {message: "Error while getting task"});
 		} else if (!task) {
@@ -195,7 +197,6 @@ exports.deleteTask = function (req, res) {
 					res.send(200, {message: "Task deleted"});
 				}
 			});
-
 		}
 	});
 };
