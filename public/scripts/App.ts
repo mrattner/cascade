@@ -35,7 +35,7 @@ module App {
 		return deferred.promise;
 	}
 
-	function checkLoggedIn ($q:ng.IQService, $http:ng.IHttpService, $location:ng.ILocationService) {
+	function checkLoggedIn ($q:ng.IQService, $http:ng.IHttpService, $state:ng.ui.IStateService, $location:ng.ILocationService) {
 		var deferred = $q.defer();
 
 		getLoggedIn($q, $http).then((user:any) => {
@@ -44,6 +44,7 @@ module App {
 			} else {
 				deferred.reject("Not logged in");
 				$location.url("/login");
+				$state.transitionTo("login");
 			}
 		});
 	}
