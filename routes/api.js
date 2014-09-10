@@ -2,7 +2,7 @@
  * API for serving JSON to the client.
  */
 
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcrypt-nodejs");
 
 var Task = require("../models/task");
 var User = require("../models/user");
@@ -44,7 +44,7 @@ exports.createUser = function (req, res) {
 			res.send(500, {message: "Error while getting user"});
 		} else {
 			// Salt and hash the password and store the new user in the database.
-			bcrypt.hash(req.body.password, 10, function (err, hash) {
+			bcrypt.hash(req.body.password, null, null, function (err, hash) {
 				if (err) {
 					res.send(500, {message: "Error while generating hash"});
 				} else {
